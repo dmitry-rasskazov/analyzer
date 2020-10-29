@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Entity\Result;
 use App\Logic\SequenceAnalyzer;
@@ -46,13 +45,16 @@ class AnalyzerController extends AbstractController
             }
             // Получаем индекс элемента массива, согласно правилу
             $analyzer = new SequenceAnalyzer($data->sequence);
-            $index    = $analyzer->getIndex();
-            // Сохранение результата в базу
+            $index    = $analyzer->getIndex($data->number);
+            // Запись результата в объект
             $result = new Result();
             $result->setArr($data->sequence)
                    ->setNum($data->number)
                    ->setIndex($index)
-                   ->setUserId($user->getId());
+                   ->setUserId($user);
+            // Сохранение результата в базу
+            $entityManager->persist($result);
+            $entityManager->flush();
 
             return new JsonResponse(['index' => $index], 200);
         } catch (\Exception $e) {
