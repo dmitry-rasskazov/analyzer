@@ -24,7 +24,7 @@ final class Version20201028220414 extends AbstractMigration
         $this->addSql('CREATE INDEX IDX_136AC1139D86650F ON result (user_id_id)');
         $this->addSql('CREATE TABLE "user" (id SERIAL NOT NULL, name VARCHAR(100) NOT NULL, auth_code BYTEA NOT NULL, PRIMARY KEY(id))');
         $this->addSql('ALTER TABLE result ADD CONSTRAINT FK_136AC1139D86650F FOREIGN KEY (user_id_id) REFERENCES "user" (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
-        $this->addSql('INSERT INTO public.user (name, auth_code) VALUES (\'testUser\', \'ds23gkfj41sz6t5ghsdt4r135hr4\')');
+        $this->addSql('INSERT INTO "user" (name, auth_code) VALUES (\'testUser\', \'ds23gkfj41sz6t5ghsdt4r135hr4\')');
     }
 
     public function down(Schema $schema) : void
