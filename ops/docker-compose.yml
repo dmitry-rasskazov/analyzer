@@ -1,0 +1,50 @@
+version: "3.7"
+
+volumes:
+  analyzer-db:
+  analyzer-composer:
+
+services:
+  analyzer-backend:
+    restart: always
+    build:
+      context: ./../
+      dockerfile: ./ops/Dockerfile
+      target: application
+    depends_on:
+      - analyzer-db
+      - analyzer-composer
+    environment:
+      PHP_INI_DATE_TIMEZONE: UTC
+      PHP_INI_MAX_EXECUTION_TIME: 30
+      PHP_INI_MAX_FILE_UPLOADS: 20
+      PHP_INI_MAX_INPUT_TIME: 60
+      PHP_INI_MEMORY_LIMIT: 512M
+      PHP_INI_OPCACHE_VALIDATE_TIMESTAMPS: 0
+      PHP_INI_POST_MAX_SIZE: 200M
+      PHP_FPM_PM: static
+      PHP_INI_UPLOAD_MAX_FILESIZE: 50M
+      PHP_FPM_PM_MAX_CHILDREN: 10
+      PHP_FPM_REQUEST_SLOWLOG_TIMEOUT: 3s
+    volumes:
+      - ./../:/app:rw
+
+  analyzer-composer:
+    build:
+      context: ./../
+      dockerfile: ./ops/Dockerfile
+      target: composer
+    volumes:
+      - ./../:/app:rw
+      - analyzer-composer:/tmp
+
+  analyzer-db:
+    image: postgres:12.1-alpine
+    restart: always
+    environment:
+      PGDATA: /var/lib/postgresql/data/pgdata
+      POSTGRES_DB: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+    volumes:
+      - analyzer-db:/var/lib/postgresql/data

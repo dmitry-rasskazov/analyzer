@@ -15,12 +15,14 @@ class Result
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
      * @ORM\Column(type="json")
+     *
+     * @var int[]
      */
-    private $arr = [];
+    private array $arr = [];
 
     /**
      * @ORM\Column(type="integer")
@@ -35,7 +37,7 @@ class Result
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="results")
      */
-    private $user_id;
+    private User $user_id;
 
     public function getId(): ?int
     {
@@ -47,11 +49,9 @@ class Result
         return $this->arr;
     }
 
-    public function setArr(array $arr): self
+    public function setArr(array $arr): void
     {
         $this->arr = $arr;
-
-        return $this;
     }
 
     public function getNum(): ?int
@@ -59,11 +59,9 @@ class Result
         return $this->num;
     }
 
-    public function setNum(int $num): self
+    public function setNum(int $num): void
     {
         $this->num = $num;
-
-        return $this;
     }
 
     public function getIndex(): ?int
@@ -71,11 +69,9 @@ class Result
         return $this->index;
     }
 
-    public function setIndex(int $index): self
+    public function setIndex(int $index): void
     {
         $this->index = $index;
-
-        return $this;
     }
 
     public function getUserId(): ?User
@@ -83,10 +79,8 @@ class Result
         return $this->user_id;
     }
 
-    public function setUserId(?User $user_id): self
+    public function setUserId(User $user): void
     {
-        $this->user_id = $user_id;
-
-        return $this;
+        $this->user_id = $user;
     }
 }
