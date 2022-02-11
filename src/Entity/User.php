@@ -18,22 +18,24 @@ class User
      * @ORM\GeneratedValue(strategy="IDENTITY")
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
      * @ORM\Column(type="string", length=100)
      */
-    private $name;
+    private string $name;
 
     /**
      * @ORM\Column(type="binary")
      */
-    private $auth_code;
+    private string $auth_code;
 
     /**
      * @ORM\OneToMany(targetEntity=Result::class, mappedBy="user_id")
+     *
+     * @var Collection<Result>|Result[]
      */
-    private $results;
+    private Collection $results;
 
     public function __construct()
     {
@@ -50,11 +52,9 @@ class User
         return $this->name;
     }
 
-    public function setName(?string $name): self
+    public function setName(?string $name): void
     {
         $this->name = $name;
-
-        return $this;
     }
 
     public function getAuthCode()
@@ -62,11 +62,9 @@ class User
         return $this->auth_code;
     }
 
-    public function setAuthCode($auth_code): self
+    public function setAuthCode($auth_code): void
     {
         $this->auth_code = $auth_code;
-
-        return $this;
     }
 
     /**
