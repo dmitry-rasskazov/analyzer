@@ -7,6 +7,7 @@ volumes:
 services:
   analyzer-backend:
     restart: always
+    ports: [ 9000 ]
     build:
       context: ./../
       dockerfile: ./ops/Dockerfile
@@ -40,6 +41,7 @@ services:
 
   analyzer-db:
     image: postgres:12.1-alpine
+    ports: [ 5432 ]
     restart: always
     environment:
       PGDATA: /var/lib/postgresql/data/pgdata
@@ -48,3 +50,12 @@ services:
       POSTGRES_USER: postgres
     volumes:
       - analyzer-db:/var/lib/postgresql/data
+
+  analyzer-frontend:
+    depends_on: [ analyzer-backend ]
+    ports: [ 8080:80 ]
+    restart: always
+    build:
+      context: ./../
+      dockerfile: ./ops/Dockerfile
+      target: frontend
