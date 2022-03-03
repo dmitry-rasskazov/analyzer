@@ -1,7 +1,7 @@
 #################
 ### base-app
 #################
-FROM php:8.1.0-fpm-alpine AS base-app
+FROM php:8.1.3-fpm-alpine AS base-app
 
 ENV SECURITY_CHECKER_VER 1.2.0
 ENV APCU_VERSION 5.1.21
@@ -69,7 +69,7 @@ RUN set -xe \
 
 WORKDIR /app
 
-USER 1000:1000
+USER www-data:www-data
 
 ####################
 ### application
@@ -85,4 +85,9 @@ WORKDIR /app
 
 USER www-data:www-data
 
+#######################
+### web-server
+#######################
+FROM nginx:1.21.6-alpine AS frontend
 
+COPY ops/nginx/default.conf /etc/nginx/conf.d/default.conf
